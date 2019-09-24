@@ -145,12 +145,18 @@ class Firestore {
     });
   }
 
+  // The source of which the data will come from.
+  static Source _source = Source.serverAndCache;
+
+  static Source get source => _source;
+
   Future<void> settings(
       {bool persistenceEnabled,
       String host,
       bool sslEnabled,
       bool timestampsInSnapshotsEnabled,
-      int cacheSizeBytes}) async {
+      int cacheSizeBytes,
+      Source source}) async {
     await channel.invokeMethod<void>('Firestore#settings', <String, dynamic>{
       'app': app.name,
       'persistenceEnabled': persistenceEnabled,
@@ -159,5 +165,6 @@ class Firestore {
       'timestampsInSnapshotsEnabled': timestampsInSnapshotsEnabled,
       'cacheSizeBytes': cacheSizeBytes,
     });
+    if (source != null) _source = source;
   }
 }
